@@ -5,10 +5,12 @@ import (
 
 	"buffalo_zerolog/locales"
 	"buffalo_zerolog/models"
+	zero "buffalo_zerolog/logger"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo-pop/v3/pop/popmw"
 	"github.com/gobuffalo/envy"
+
 	"github.com/gobuffalo/middleware/contenttype"
 	"github.com/gobuffalo/middleware/forcessl"
 	"github.com/gobuffalo/middleware/i18n"
@@ -43,6 +45,8 @@ var (
 // declared after it to never be called.
 func App() *buffalo.App {
 	appOnce.Do(func() {
+		
+
 		app = buffalo.New(buffalo.Options{
 			Env:          ENV,
 			SessionStore: sessions.Null{},
@@ -50,6 +54,7 @@ func App() *buffalo.App {
 				cors.Default().Handler,
 			},
 			SessionName: "_buffalo_zerolog_session",
+			Logger:      zero.NewZeroLogger(),
 		})
 
 		// Automatically redirect to SSL
